@@ -1,0 +1,17 @@
+name: CI
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install OpenMP
+        run: sudo apt-get install -y libomp-dev
+      - name: Compile FxC (rows x columns)
+        run: |
+          cd FxC-EXP-Rendimiento@MacBook/MatMult
+          make all || gcc -fopenmp -o MM1c MM1c.c Otime.c -lm 2>&1
+      - name: Compile FxF (rows x rows)
+        run: |
+          cd FxF-EXP-Rendimiento@MacBook/MatMult
+          make all || gcc -fopenmp -o MM1f MM1f.c Otime.c -lm 2>&1
